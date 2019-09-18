@@ -1,0 +1,288 @@
+﻿https://docs.google.com/presentation/d/1EeBOT0GRQa0N6e5CGSA9diELsRjfnP1YctTevAJd8Uw/edit#slide=id.g6017c4d39b_2_29
+https://www.youtube.com/watch?v=tZLQ-cNCf70&list=PL9FpF_z-xR_E4rxYMMZx5cOpwaiwCzWUH&index=8&frags=wn
+https://codesandbox.io/s/react-basics-vjkjv
+https://bit.ly/beginreact
+
+컴포넌트 : 데이터를 넣으면 우리가 지정한 인터페이스를 조립해서 보여준다. (뷰만 신경쓴다. 써드파티라이브러리가 나머지 담당-리덕스, 리엑트 라이브러리..)
++ 공식 API 지원 X -> 방법이다양, 장점이자 단점?
+웹팩:웹프로젝트를 만들때 전체적으로 파일들을 관리해 주는 도구(번들 같은 개념)
+바벨:자바스크립트 문법변환도구
+
+JSX
+태그는 꼭 닫혀있어야 한다.
+<input type="text"> <input type="text"/> self closing tag
+
+두개 이상의 엘리먼트는 무조건 하나의 엘리먼트로 감싸져있어야 한다.(16.2 이후로 Fragment를 이용하여 불필요한 div를 없앨 수 있다)
+<div>Hello</div> <div>Bye</div>
+<div>
+	<div>Hello</div> <div>Bye</div>
+</div>
+
+====================================================
+
+import React, { Component, Fragment } from 'react';
+<Fragment>
+        <div>hello</div> <div>bye</div>
+</Fragment>
+
+====================================================
+
+render() {
+    const name = '진우현';
+
+    return <div>hello, {name}</div>;
+  }
+
+ES6에서 var 사용 x, const : 한번 선언 후 고정적인 값 / let : 유동적인 값
+====================================================
+render() {
+    return (
+      <div>
+        {
+          1 + 1 === 2 
+            ? (<div>맞아요!</div>)
+            : (<div>틀려요!</div>)
+        }
+      </div>
+    );
+  }
+====================================================
+ const value = 1;
+    return (
+      <div>
+        {
+          (function() {
+            if (value === 1) return (<div>하나</div>);
+            if (value === 2) return (<div>둘</div>);
+            if (value === 3) return (<div>셋</div>);
+          })()
+        }
+      </div>
+    );
+  }
+
+====================================================
+
+
+화살표 함수 표현(arrow function expression)은 function 표현에 비해 구문이 짧고  
+자신의 this, arguments, super 또는 new.target을 바인딩 하지 않습니다. 화살표 함수는 항상 익명입니다. 
+이  함수 표현은 메소드 함수가 아닌 곳에 가장 적합합니다. 그래서 생성자로서 사용할 수 없습니다
+=>화살표 함수는 this, arguments, super 개념이 없는 익명 함수입니다. 앞으로 ES6 에서 자주 사용하게 될 것입니다.
+var materials = [
+  'Hydrogen',
+  'Helium',
+  'Lithium',
+  'Beryllium'
+];
+
+console.log(materials.map(material => material.length));
+// expected output: Array [8, 6, 7, 9]
+
+====================================================
+
+render() {
+    const style = {
+      backgroundColor: 'black',
+      fontSize: '32px',
+      color: 'white'
+    };
+    return (
+      <div style={style}>
+        스타일 테스트!
+      </div>
+    )
+  }
+
+App.css생성 후
+.App {
+  background: black;
+  color: aqua;
+  font-size: 36px;
+}
+
+import './App.css';
+return <div className="App">스타일 테스트!</div>;
+
+// class로 사용하고 싶다면 className="css", Name을 때도 결과는 나오지만 className이 옳은 표현 !
+====================================================
+
+render() {
+    // 주석
+    /*멀티라인 주석 */
+
+    return (
+      // 주석
+      /*멀티라인 주석 */
+      <div>
+        // 주석 {/*멀티라인 주석 */}
+        <h1>h1랜더링</h1>
+        <h2
+          something="asd" // 이것은 주석입니다 !
+        >
+          컴포넌트 주석</h2>
+      </div>
+    );
+  }
+
+====================================================
+props : 부모가 자식에게 값을 넘겨준다.
+<<MyName >>
+import React, { Component } from 'react';
+
+class MyName extends Component {
+  static defaultProps = {
+    name: '기본이름'
+  }
+  render() {
+    return (
+      <div>
+        안녕하세요! 제 이름은 <b>{this.props.name}</b> 입니다.
+      </div>
+    );
+  }
+}
+
+MyName.defaultProps = {
+  name: '기본이름'
+};
+
+export default MyName;
+
+<<app.js>>
+import React, { Component } from 'react';
+import MyName from './MyName';
+
+class App extends Component {
+  render() {
+    return <MyName name="리액트" />;
+  }
+}
+
+export default App;
+====================================================
+<<Count>>
+import React, { Component } from 'react';
+
+class Count extends Component {
+  state = {
+    number: 0
+  };
+
+ //constructor(props) {
+    super(props);
+    this.handleIncrease = this.handleIncrease.bind(this);
+  }
+
+  handleIncrease = () => {				// handleIncreaser() {console.log(this);
+    this.setState({
+      number: this.state.number + 1
+    });
+  };
+
+  handleDecrease = () => {
+    this.setState({
+      number: this.state.number - 1
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <h1>카운터</h1>
+        <div>값: {this.state.number}</div>
+        <button onClick={this.handleIncrease}>+</button>
+        <button onClick={this.handleDecrease}>-</button>
+      </div>
+    );
+  }
+}
+
+export default Count;
+
+
+====================================================
+라이프 사이클 :
+컴포넌트가 브라우저에 나타날때, 업데이트 될때, 사라질때 LifeCycleAPI 사용!
+Mounting : 컴포넌트가 브라우저에 나타남
+Updating : props나 state가 바뀌었을 때
+Unmounting : 컴포넌트가 브라우저에서 사라질 때
+
+constructor : 생성자 함수, 우리가 만들 컴포넌트가 브라우저상에 나타날 때, 가장먼저 생성
+getDerivedStateFromProps : props로 받은 값을 state로 동기화 시키고 싶을 때 사용
+
+render : 어떤 DOM을 만들지, 내부의 TAG들에 어떤 값들을 전달해 줄지 알려줌!
+componentDidMount : 특정 이벤트를 리스닝 할수 있음(클릭).특정 DOM에다가 차트를 그리는 등 사용(D3)
+
+(중요)shouldComponentUpdate : 컴포넌트가 업데이트 되는 성능을 최적화 시킬때 사용
+부모 -> 자식 랜더가 자동으로 되게 되있는데 불필요한 것이 생길수 있다. 그것들이 true면 render, false면 거절 !
+getSnapshotBeforeUpdate: 랜더링한 결과물이 브라우저에 반영되기 직전에 호출되는 함수. 스크롤의 위치, 해당 DOM의 크기를 가져오고 싶을 때 사용
+componendDidUpdate: Update가 되었을때 호출되는 함수. 
+
+componentWillUnmount: 컴포넌트가 사라지는 과정에서 호출되는 함수. componentDidMount 에서 지정한 이벤트를 없애주는 역할 가능
+====================================================
+
+
+프레임워크 - 해당기능을 틀로만들어 놓음. 만들어 놓은 틀을 벗어나기 힘들며 사용하지 않는 기능도 들어있어서 무겁게 느껴질 수 있음
+라이브러리 - 필요한 부분만 가져다가 쓸 수 있음. 컨트롤러 및 라우터기능을 내장하고 있지 않아서 가볍다.
+
+리엑트 라이브러리 가장 큰 점 : 가상 DOM을 사용 !! 
+실제 DOM을 처리하는것은 직접 처리하는것은 성능도 느리고 비효율적이며 관리하기 힘들다. (데이터가 많으면 많아질수록)
+가상 DOM은 그를 추상화 시킨것으로 자바스크립트 객체에 불가하기 때문에 실제 DOM API를 사용해서 처리하는 것보다 훨씬 빠르다 !
+
+
+react and virtual dom
+https://www.youtube.com/watch?v=BYbgopx44vo
+
+모델이 뷰에게 많은 업데이트를 시켰고 규칙이 많아질수록 부하가 걸렸다
+{
+	username: cmd342
+	points: 54
+	favortie color: blue
+	favorite shape: circle
+}	// 하나하나 업데이트 해주며 규칙 추가
+
+여기서 리엑트가 개발되어 모델이 뷰에게 완성된 데이터세트를 보내주면 뷰는 이데이터들을 어떻게 DOM에 반영시키고 그려야할지 알고있기 때문에
+정확하고 빠르게 그릴수있었다. 그것을 리엑트에게 보내면 리엑트는 이것을 스캔해서 빠르고 정확한 메모리장치를 통해 
+기존에 진짜 DOM에 뭐가 그려져있었는지 정확히 기억할수 있었다.
+
+VIEW에서 교체하는 것이아니라 변화할때마다 새로만들어버리자 ! => 여기서 나온게 가상 DOM, 
+자바스크립트로 이루어진 가상 DOM에 한번 랜더링 하고 기존의 DOM과 
+비교를 한 다음에 정말 변화가 필요한 곳만 바꿔주는 것이다.
+
+<리액트 장점>.
+  virtualDOM사용, 
+
+  배우기 간단하다(Component),
+ => 리액트는 코드를 분리시키지 않고 컴포넌트, 단 하나만을 사용한다.(앵귤러와 백본은 분리시킨다고 한다)
+     필자가 앵귤러로 프로젝트를 해보기전에는 이해하기 어려웠고 이해했을 때는 귀찮았다고 느꼈지만 리액트는 아니라고한다.
+
+  뛰어난메모리관리&성능(Garbage Collection), 메모리 관리와 성능
+ => 아무리 성능이 뛰어나도 잘못사용하면 의미가 없기때문에 적재적소에 사용하는 것이 가장 중요
+
+  서버&클라이언트 렌더링  ,
+ => (초기구동딜레이)보통 UI, 클라이언트 렌더링만 하는데 서버사이드 랜더링, 클라이언트 랜더링 둘다 지원 
+페이지 로딩후 비동기로(AJAX) 처리하면 아무것도 나타나지 않다가 JAVASCRIPT처리가 끝난 후에 UI가 나타난다. 즉 초기 랜더링이 존재한다는것을 의미한다.
+서버 랜더링을 하면 서버측에서 HTML을 미리 생성하고 문자열 형태로 브라우저에 띄어준다. 그 후 다시 클라이언트 사이드 렌더링이 시작된다.
+ 결과적으로 초기구동딜레이가 짧다 !
+
+      (검색엔진최적화) SEO(Search Engine Optimization)
+   타 라이브러리들은 서드파티라이브러리를 사용하여 직접 구현해야한다. (react는 포함)
+   서버사이드 랜더링이 무조건 좋은것은 아니다. 방문자 수가 많고 사양이 좋지 않다면 추천x
+
+  매우간편한 UI 수정 및 재사용,
+ => UI를 컴포넌트화
+
+  페이스북이 밀어준다, 
+ => 갑자기 망할 확률이 거의 없다. 알다시피 많은 프레임워크, 라이브러리들이 있지만 다수의 사람이 사용하는것은 소수 .
+
+다른 프레임워크나 라이브러리와 혼용가능.
+ => 이말은 이미 개발이 완료된 곳에서도 부분적으로 리액트를 사용할 수 있다는 뜻 !!
+-
+
+<리액트 단점>
+  view only, 
+=> (오직 보여지는 부분만!)데이터 모델링, AJAX, 라우팅 등등의 기능은 없다.
+    빠진 부분은 다른 라이브러리를 통해 구현하면 된다. + 리엑트만으로 모든 코드를 구현할 순 없다 !
+ie8이하 지원x
+=> 불가능하진 않다. 버전14이하에 폴리핏 자바스크립트의 신규 기능을 이전 문법으로 구현하여 호환시켜주는 polyfill을 사용하면 가능은 하다.
+
